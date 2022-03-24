@@ -48,6 +48,20 @@ export default function App() {
               borderColor: "rgba(53, 162, 235, 1)",
               borderWidth: 1,
             },
+            {
+              label: "C3",
+              data: results.data.map((item) => item.c3),
+              backgroundColor: ["rgba(255,205,86,0.5)"],
+              borderColor: "rgb(255,205,86)",
+              borderWidth: 1,
+            },
+            {
+              label: "C4",
+              data: results.data.map((item) => item.c4),
+              backgroundColor: ["rgba(75,192,192,0.5)"],
+              borderColor: "rgb(75,192,192)",
+              borderWidth: 1,
+            },
           ],
         });
       },

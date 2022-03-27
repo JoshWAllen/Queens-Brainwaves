@@ -7,6 +7,7 @@
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "chart.js": "^3.7.1",
+    "fft-js": "^0.0.12",
     "papaparse": "^5.3.1",
     "react": "^17.0.2",
     "react-chartjs-2": "^4.0.1",

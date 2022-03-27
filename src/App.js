@@ -20,7 +20,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend
-); //Not sure why this needs to be included
+); //registering plugins
 
 export default function App() {
   //function passed down to CSVinput component
@@ -239,10 +239,10 @@ export default function App() {
     <div className="App">
       <div>
         <CSVInput handleInput={handleInput} />
-        {/* <ScatterChart chartData={data} options={timeOptions} />
+        <ScatterChart chartData={data} options={timeOptions} />
         <br></br>
         <hr></hr>
-        <br></br> */}
+        <br></br>
         <ScatterChart chartData={fData} options={freqOptions} />
       </div>
     </div>

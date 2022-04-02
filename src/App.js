@@ -161,89 +161,27 @@ export default function App() {
   });
 
   //options props
-  const timeOptions = {
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Electrical Brain Signals vs Time",
-        font: {
-          size: 25,
-        },
-      },
-    },
-    scales: {
-      x: {
-        beginAtZero: false,
-        title: {
-          display: true,
-          text: "Time [s]",
-          font: {
-            size: 20,
-          },
-        },
-      },
-      y: {
-        beginAtZero: false,
-        title: {
-          display: true,
-          text: "Electrical Activity [μV]",
-          font: {
-            size: 20,
-          },
-        },
-      },
-    },
+  const timeTitles = {
+    main: "Electrical Brain Signals vs Time",
+    xaxis: "Time [s]",
+    yaxis: "Electrical Activity [μV]",
   };
 
-  const freqOptions = {
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Electrical Brain Signals vs Frequency",
-        font: {
-          size: 25,
-        },
-      },
-    },
-    scales: {
-      x: {
-        beginAtZero: false,
-        title: {
-          display: true,
-          text: "Frequency [Hz]",
-          font: {
-            size: 20,
-          },
-        },
-      },
-      y: {
-        beginAtZero: false,
-        title: {
-          display: true,
-          text: "Amplitude",
-          font: {
-            size: 20,
-          },
-        },
-      },
-    },
+  const freqTitles = {
+    main: "Electrical Brain Signals vs Frequency",
+    xaxis: "Frequency [Hz]",
+    yaxis: "Amplitude",
   };
 
   return (
     <div className="App">
       <div>
         <CSVInput handleInput={handleInput} />
-        <ScatterChart chartData={data} options={timeOptions} />
+        <ScatterChart chartData={data} titles={timeTitles} />
         <br></br>
         <hr></hr>
         <br></br>
-        <ScatterChart chartData={fData} options={freqOptions} />
+        <ScatterChart chartData={fData} titles={freqTitles} />
       </div>
     </div>
   );

@@ -31,6 +31,7 @@ function ScatterChart({ chartData, titles }) {
       },
       y: {
         beginAtZero: false,
+        type: "linear",
         title: {
           display: true,
           text: titles.yaxis,
@@ -47,9 +48,6 @@ function ScatterChart({ chartData, titles }) {
     xmin: "",
     xmax: "",
   });
-
-  console.log(formData.xmin);
-  console.log(options);
 
   //When form state changes, update options state accordingly
   React.useEffect(() => {
@@ -68,6 +66,24 @@ function ScatterChart({ chartData, titles }) {
       };
     });
   }, [formData]);
+
+  //Changes y axis between linear and log scaling
+  function toggleLog() {
+    setOptions((prevOptions) => {
+      return {
+        //Keep the Options object exact same except for changes to scales (uses JS spread operator)
+        ...prevOptions,
+        scales: {
+          ...prevOptions.scales,
+          y: {
+            ...prevOptions.scales.y,
+            type:
+              prevOptions.scales.y.type === "linear" ? "logarithmic" : "linear",
+          },
+        },
+      };
+    });
+  }
 
   //Set scales back to default and empty forms
   function resetScales() {
@@ -94,6 +110,9 @@ function ScatterChart({ chartData, titles }) {
   return (
     <>
       <Scatter data={chartData} options={options} />
+
+      <button onClick={toggleLog}>Log y-axis</button>
+      <h4>{options.scales.y.type} scale</h4>
 
       <label htmlFor="xmin">x-min:</label>
       <input

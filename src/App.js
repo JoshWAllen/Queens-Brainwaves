@@ -1,4 +1,3 @@
-import "./styles.css";
 import React from "react";
 import {
   Chart as ChartJS,
@@ -11,9 +10,8 @@ import {
   Title,
 } from "chart.js";
 import ScatterChart from "./components/ScatterChart";
-import CSVInput from "./components/CSVInput";
-import { parse } from "papaparse";
-
+import SideBar from "./components/SideBar";
+import SidePanel from "./components/SidePanel";
 ChartJS.register(
   LinearScale,
   LogarithmicScale,
@@ -25,20 +23,22 @@ ChartJS.register(
 ); //registering plugins
 
 export default function App() {
-  //function passed down to CSVinput component
-  function handleCSVInput(e) {
-    parse(e.target.files[0], {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        console.log(e.target.files[0].name);
-        selectCurrentData(results.data);
+  //State for the time data prop
+  const [data, setData] = React.useState({
+    //initial state has empty fields as placeholders
+    labels: [],
+    datasets: [
+      {
+        label: "",
+        data: [],
+        backgroundColor: [],
+        borderColor: "black",
+        borderWidth: 1,
       },
-    });
-  }
+    ],
+  });
 
-  //Given array of data, sets the data state
+  //Given array of data, sets the data state - passed down to file explorer component
   function selectCurrentData(data) {
     console.log("function ran");
     setData({
@@ -79,62 +79,6 @@ export default function App() {
 
   //State for file explorer side panel
   const [folderFiles, setFolderFiles] = React.useState({});
-
-  function fileClick(e) {
-    console.log(e.target.innerText);
-    const CSVData = folderFiles[e.target.innerText].data.data;
-    selectCurrentData(CSVData);
-  }
-
-  //For every csv file in folder state, create a file component in sidebar file explorer
-  const fileListComponents = Object.keys(folderFiles).map((filepath) => {
-    return (
-      <li key={filepath} onClick={fileClick} className="folder-file">
-        {filepath}
-      </li>
-    );
-  });
-
-  //Take folder as input and get info from each file within it
-  function folderInput(e) {
-    const files = e.target.files;
-
-    //loops through all files in folder and parses CSV data
-    let folderData = {};
-    for (let i = 0; i < files.length; i++) {
-      let file = files.item(i);
-      parse(file, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          //Filters out filetypes that are not CSV
-          if (file.type === "text/csv") {
-            folderData[file.webkitRelativePath] = { file: file, data: results };
-          }
-          if (i === files.length - 1) {
-            //code to run when all files are parsed
-            setFolderFiles(folderData);
-          }
-        },
-      });
-    }
-  }
-
-  //State for the time data prop
-  const [data, setData] = React.useState({
-    //initial state has empty fields as placeholders
-    labels: [],
-    datasets: [
-      {
-        label: "",
-        data: [],
-        backgroundColor: [],
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  });
 
   //frequency conversion
   var fft = require("fft-js").fft;
@@ -227,33 +171,52 @@ export default function App() {
     yaxis: "Amplitude",
   };
 
+  //Shows different panels depending on which sidebar button clicked
+  const [showSidePanel, setShowSidePanel] = React.useState(false);
+
+  function toggleSidePanel() {
+    setShowSidePanel((prevState) => {
+      console.log("clicked");
+      return !prevState;
+    });
+  }
+
+  const [currentSidePanel, setCurrentSidePanel] =
+    React.useState("File Explorer");
+
+  function setPanel(panel) {
+    if (!showSidePanel) {
+      setCurrentSidePanel(panel);
+      toggleSidePanel();
+    } else if (currentSidePanel === panel) {
+      toggleSidePanel();
+    } else {
+      setCurrentSidePanel(panel);
+    }
+    console.log(panel);
+  }
+
+  //State for title of whatever graph is current displayed
+  const [title, setTitle] = React.useState(
+    "Upload a CSV file from your computer or browse the Gallery of datasets!"
+  );
+
   return (
-    <div className="App">
-      <div>
-        <CSVInput handleInput={handleCSVInput} />
-        {/* <iframe
-          src="https://drive.google.com/embeddedfolderview?id=14a7O2lfUv0aVyjHa1gkY2KH_Aej_sis4"
-          width="600"
-          height="500"
-          frameBorder="0"
-        ></iframe> */}
-        <input
-          type="file"
-          id="folder-input"
-          onChange={folderInput}
-          directory=""
-          webkitdirectory=""
-          multiple
+    <div className="text-center flex">
+      <SideBar click={setPanel} />
+      {showSidePanel && (
+        <SidePanel
+          currentPanel={currentSidePanel}
+          selectCurrentData={selectCurrentData}
+          folderFiles={folderFiles}
+          setFolderFiles={setFolderFiles}
+          setTitle={setTitle}
         />
-        <div className="flex-container">
-          <div id="folder">
-            <ul className="folder-list">{fileListComponents}</ul>
-          </div>
-          <div className="chart-container">
-            <ScatterChart chartData={data} titles={timeTitles} />
-            <ScatterChart chartData={fData} titles={freqTitles} />
-          </div>
-        </div>
+      )}
+      <div className="flex-grow h-screen p-7 overflow-auto">
+        <h1 className="text-3xl">{title}</h1>
+        <ScatterChart chartData={data} titles={timeTitles} />
+        <ScatterChart chartData={fData} titles={freqTitles} />
       </div>
     </div>
   );

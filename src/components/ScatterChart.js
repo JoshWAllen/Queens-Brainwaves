@@ -12,7 +12,7 @@ function ScatterChart({ chartData, titles }) {
         display: true,
         text: titles.main,
         font: {
-          size: 25,
+          size: 20,
         },
       },
     },
@@ -108,32 +108,55 @@ function ScatterChart({ chartData, titles }) {
   }
 
   return (
-    <>
+    <div className="mt-20">
       <Scatter data={chartData} options={options} />
+      <div className="flex justify-center items-center w-full gap-3">
+        <button
+          onClick={toggleLog}
+          className="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white 
+        transition-all duration-400 border border-transparent rounded-md focus:outline-none 
+        bg-cyan-600 active:bg-cyan-400 hover:bg-cyan-500"
+        >
+          Log y-axis
+        </button>
+        <h4>{options.scales.y.type} scale</h4>
 
-      <button onClick={toggleLog}>Log y-axis</button>
-      <h4>{options.scales.y.type} scale</h4>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          x-min:
+          <input
+            type="number"
+            id="xmin"
+            name="xmin"
+            onChange={handleChange}
+            value={formData.xmin}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
+            leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </label>
 
-      <label htmlFor="xmin">x-min:</label>
-      <input
-        type="number"
-        id="xmin"
-        name="xmin"
-        onChange={handleChange}
-        value={formData.xmin}
-      />
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          x-max:
+          <input
+            type="number"
+            id="xmax"
+            name="xmax"
+            onChange={handleChange}
+            value={formData.xmax}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
+            leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </label>
 
-      <label htmlFor="xmax">x-max:</label>
-      <input
-        type="number"
-        id="xmax"
-        name="xmax"
-        onChange={handleChange}
-        value={formData.xmax}
-      />
-
-      <button onClick={resetScales}>Reset Scales</button>
-    </>
+        <button
+          onClick={resetScales}
+          className="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white 
+        transition-all duration-400 border border-transparent rounded-md focus:outline-none 
+        bg-cyan-600 active:bg-cyan-400 hover:bg-cyan-500"
+        >
+          Reset Scales
+        </button>
+      </div>
+    </div>
   );
 }
 

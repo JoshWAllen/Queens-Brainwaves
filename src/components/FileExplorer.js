@@ -51,7 +51,6 @@ const FileExplorer = ({
   //Take folder as input and get info from each file within it
   function folderInput(e) {
     const files = e.target.files;
-
     //loops through all files in folder and parses CSV data
     let folderData = {};
     for (let i = 0; i < files.length; i++) {
@@ -61,14 +60,12 @@ const FileExplorer = ({
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
+          // console.log(file.type);
           //Filters out filetypes that are not CSV
-          if (file.type === "text/csv") {
-            folderData[file.webkitRelativePath] = { file: file, data: results };
-          }
-          if (i === files.length - 1) {
-            //code to run when all files are parsed
-            setFolderFiles(folderData);
-          }
+          // if (file.type === "text/csv") // seemed to cause issues on firefox
+          folderData[file.webkitRelativePath] = { file: file, data: results };
+
+          if (i === files.length - 1) setFolderFiles(folderData); //runs when all files are parsed
         },
       });
     }
@@ -77,7 +74,7 @@ const FileExplorer = ({
   return (
     <div>
       <div className="flex flex-row gap-1 items-center justify-evenly mx-1">
-        <label className="flex items-center my-6 font-bold p-4 text-white rounded-md bg-cyan-600 inline-block hover:bg-cyan-500">
+        <label className="flex items-center justify-center w-28 my-6 font-bold p-4 text-white rounded-md bg-cyan-600 hover:bg-cyan-500">
           <AiFillFileAdd size="20" />
           Add File
           <input
@@ -89,7 +86,7 @@ const FileExplorer = ({
             accept=".csv"
           />
         </label>
-        <label className="flex items-center my-6 font-bold p-4 text-white rounded-md bg-cyan-600 inline-block hover:bg-cyan-500">
+        <label className="flex items-center justify-center w-28 my-6 font-bold p-4 text-white rounded-md bg-cyan-600 hover:bg-cyan-500">
           <AiFillFolderAdd size="20" />
           Add Folder
           <input

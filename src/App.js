@@ -21,6 +21,8 @@ ChartJS.register(
   Tooltip,
   Legend
 ); //registering plugins
+//frequency conversion
+var fft = require("fft-js").fft;
 
 export default function App() {
   //State for the time data prop
@@ -79,9 +81,6 @@ export default function App() {
 
   //State for file explorer side panel
   const [folderFiles, setFolderFiles] = React.useState({});
-
-  //frequency conversion
-  var fft = require("fft-js").fft;
 
   //State for the frequency data prop
   const [fData, setFData] = React.useState({
@@ -213,7 +212,7 @@ export default function App() {
           setTitle={setTitle}
         />
       )}
-      <div className="flex-grow h-screen p-7 overflow-auto">
+      <div className="flex-grow h-screen p-7 overflow-auto border-none">
         <h1 className="text-3xl">{title}</h1>
         <ScatterChart chartData={data} titles={timeTitles} />
         <ScatterChart chartData={fData} titles={freqTitles} />

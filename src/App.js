@@ -111,7 +111,11 @@ export default function App() {
       return dataset.data.map((element) => parseFloat(element));
     });
 
-    const phasors = timeData.map((element) => fft(element.slice(0, 2048))); //FFT only works with 2^n sized arrays
+    //finding closest power of 2 to the length of the data array
+    let sizePowerOf2 = timeData[0].length >= 2048 ? 2048 : 1024;
+    const phasors = timeData.map((element) =>
+      fft(element.slice(0, sizePowerOf2))
+    ); //FFT only works with 2^n sized arrays
 
     const fWeights = phasors.map((phasor) =>
       phasor.map((complexNum) => calcMagnitude(complexNum[0], complexNum[1]))
@@ -171,7 +175,7 @@ export default function App() {
   };
 
   //Shows different panels depending on which sidebar button clicked
-  const [showSidePanel, setShowSidePanel] = React.useState(false);
+  const [showSidePanel, setShowSidePanel] = React.useState(true);
 
   function toggleSidePanel() {
     setShowSidePanel((prevState) => {
@@ -212,7 +216,7 @@ export default function App() {
           setTitle={setTitle}
         />
       )}
-      <div className="flex-grow h-screen p-7 overflow-auto border-none">
+      <div className="flex flex-col flex-grow h-screen p-7 overflow-auto border-none">
         <h1 className="text-3xl">{title}</h1>
         <ScatterChart chartData={data} titles={timeTitles} />
         <ScatterChart chartData={fData} titles={freqTitles} />
